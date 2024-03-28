@@ -1,0 +1,48 @@
+-- CONSULTAS BASICAS 
+
+----------------------------------------------------------------------
+
+-- 1. Lista de funcionários ordenados pelo salário decrescente:
+  	select *
+ 	    from vendedores
+  order by salario DESC;
+
+----------------------------------------------------------------------
+ 
+-- 2. Lista de pedidos de vendas ordenado por data de emissão:
+    select *
+    	from pedido
+  order by data_emissao;
+
+----------------------------------------------------------------------
+
+-- 3. Valor de faturamento por cliente:
+  	select pedido.id_cliente,
+      	   clientes.razao_social AS nome_cliente,
+    	     SUM(pedido.valor_total) AS faturamento
+	    from pedido
+	    join clientes ON clientes.id_cliente = pedido.id_cliente
+  group by pedido.id_cliente, clientes.razao_social
+  order by pedido.id_cliente asc; -- Listando do menor para o maior para deixar mais agradavel a ordem
+
+----------------------------------------------------------------------
+
+ -- 4. Valor de faturamento por empresa:
+	  select pedido.id_empresa AS ID_Empresa,
+      	   empresa.razao_social AS Nome_Empresa,
+    	     SUM(pedido.valor_total) AS faturamento
+	    from pedido
+	    join empresa ON empresa.id_empresa = pedido.id_empresa
+  group by pedido.id_empresa, empresa.razao_social
+  order by pedido.id_empresa asc; -- Listando do menor para o maior para deixar mais agradavel a ordem
+  
+----------------------------------------------------------------------
+
+-- 5. Valor de faturamento por vendedor:
+	  select vendedores.nome 			AS vendedor,
+           SUM(pedido.valor_total)  AS faturamento
+	    from vendedores
+inner join clientes ON clientes.id_vendedor = vendedores.id_vendedor
+inner join pedido   ON pedido.id_cliente = clientes.id_cliente
+  group by vendedores.nome
+  order by vendedores.nome asc; -- Listando em ordem alfabetica para ficar mais agradavel
